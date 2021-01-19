@@ -1,0 +1,57 @@
+system:
+  version: '0.0.0.1'
+  addr: ':8000'
+  # sso\ldap
+  login-type: 'sso'
+mysql:
+  username: 'root'
+  password: 'root'
+  url: 'localhost:3306'
+  db-name: 'hario_ci'
+  config: 'charset=utf8&parseTime=True&loc=Local'
+  max-idle-conns: 10
+  max-open-conns: 10
+  log-mode: false
+log:
+  # 日志前缀
+  prefix: '[hario/ci/server]'
+  # 日志根目录
+  log-base-path: 'logs'
+  # web日志目录
+  gin-path: 'web'
+  # info日志目录
+  info-path: 'info'
+  # orm日志目录
+  orm-path: 'orm'
+  # 打包日志目录
+  build-job-log-path: 'script'
+client:
+  # 'least_conn' 最小连接数 | weight 权重
+  balance-strategy: 'weight'
+  root-url: '/clientAction'
+build:
+  # 打包结果目录
+  file-path: 'build'
+job:
+  # 每日清理任务
+  clear: '0 0 0 * * *'
+  # 日志清理周期 (天)
+  clear-log-interval: 1
+  # 打包结果清理周期 (天)
+  clear-build-file-interval: 1
+ldap:
+  host: "10.8.23.253"
+  port: "389"
+  search-base: "CN=Users,DC=hariogame,DC=com"
+  search-filter: "(&(objectClass=user)(sAMAccountName=%s))"
+  domain: "hariogame.com"
+  email-suffix: "@hariogame.com"
+crypto:
+  # 密码加密key后缀解密用的key
+  decode-key-suffix: "o0qg9N7d"
+  # 密码加密key后缀密文
+  cipher-text-suffix: "Z64vI51D3VY="
+sso:
+  app-id: "hario_ci"
+  base-url: "http://dev.be.sso.hariogame.com/root/"
+  check-token-url: "loginByToken.action"
