@@ -1,20 +1,20 @@
 system:
   version: '0.0.0.1'
-  addr: ':8000'
+  addr: ':8001'
   # sso\ldap
-  login-type: 'sso'
+  login-type: 'ldap'
 mysql:
   username: 'root'
   password: 'root'
   url: 'localhost:3306'
-  db-name: 'hario_ci'
+  db-name: 'myblog'
   config: 'charset=utf8&parseTime=True&loc=Local'
   max-idle-conns: 10
   max-open-conns: 10
   log-mode: false
 log:
   # 日志前缀
-  prefix: '[hario/ci/server]'
+  prefix: '[mumu996/myblog/backend]'
   # 日志根目录
   log-base-path: 'logs'
   # web日志目录

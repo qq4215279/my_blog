@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"hario/ci/server/global"
+	"backend/src/global"
 	"os"
 	"path/filepath"
 )

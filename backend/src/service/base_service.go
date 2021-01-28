@@ -1,6 +1,6 @@
 package service
 
-import "constants"
+import "backend/src/constants"
 
 type ResponseBody struct {
 	Data  interface{} `json:"data"`

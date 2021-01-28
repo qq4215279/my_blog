@@ -1,10 +1,10 @@
 package core
 
 import (
+	"backend/src/constants"
+	"backend/src/global"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"hario/ci/server/constants"
-	"hario/ci/server/global"
 	"time"
 )
 

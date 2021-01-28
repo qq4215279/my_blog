@@ -6,14 +6,14 @@
 package utils
 
 import (
+	"backend/src/constants"
+	"backend/src/global"
 	"bytes"
 	"crypto/cipher"
 	"crypto/des"
 	"crypto/md5"
 	"encoding/base64"
 	"fmt"
-	"hario/ci/server/constants"
-	"hario/ci/server/global"
 	"io"
 )
 

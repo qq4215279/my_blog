@@ -1,7 +1,7 @@
 package main
 
 import (
-	"initialize"
+	"backend/src/initialize"
 )
 
 // 初始化

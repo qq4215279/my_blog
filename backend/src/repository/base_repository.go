@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"global"
+	"backend/src/global"
 )
 
 func Save(row interface{}) {

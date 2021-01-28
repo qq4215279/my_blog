@@ -6,8 +6,8 @@ import (
 )
 
 type BaseTable struct {
-	Id        uint           `gorm:"primarykey" json:"id" form:"id"`
-	CreatedAt time.Time      `json:"createdAt"`
-	UpdatedAt time.Time      `json:"updatedAt"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deletedAt"`
+	Id         uint           `gorm:"primarykey" json:"id" form:"id"`
+	CreateTime time.Time      `json:"createTime"`
+	UpdateTime time.Time      `json:"updateTime"`
+	DeleteTime gorm.DeletedAt `gorm:"index" json:"deleteTime"`
 }
