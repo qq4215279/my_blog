@@ -10,6 +10,7 @@ import (
 	"backend/src/module"
 	"backend/src/repository"
 	"backend/src/utils"
+	"reflect"
 	"strings"
 )
 
@@ -41,9 +42,9 @@ func GetAllTag() ResponseBody {
 
 // 修改标签
 func UpdateTag(param module.Tag) ResponseBody {
-	var tagById module.Tag
-	repository.FindById(&tagById, param.Id)
-	if tagById.Id < 1 {
+	var tag module.Tag
+	repository.FindById(&tag, param.Id)
+	if reflect.DeepEqual(tag, module.Tag{}) {
 		return NewParamErrorResponseBody()
 	}
 	// 名称是否重复
@@ -54,10 +55,10 @@ func UpdateTag(param module.Tag) ResponseBody {
 	}
 
 	if !utils.IsBlank(param.Name) {
-		tagById.Name = param.Name
+		tag.Name = param.Name
 	}
 
-	repository.Save(tagById)
+	repository.Save(tag)
 	return NewSimpleSuccessResponseBody()
 }
 
@@ -65,7 +66,7 @@ func UpdateTag(param module.Tag) ResponseBody {
 func DeleteTag(id uint) ResponseBody {
 	var tag module.Tag
 	repository.First(&tag, id)
-	if utils.IsBlank(tag.Name) {
+	if reflect.DeepEqual(tag, module.Tag{}) {
 		return NewParamErrorResponseBody()
 	}
 

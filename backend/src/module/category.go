@@ -9,11 +9,11 @@ package module
 type Category struct {
 	BaseTable
 	// 名称
-	Name string `json:"name"`
+	Name string `json:"name" form:"name"`
 	// 描述
-	Describe string `json:"describe"`
+	Describe string `json:"describe" form:"describe"`
 	// 文章数量
-	Count int `json:"count"`
+	Count int `json:"count" form:"count"`
 }
 
 func (category Category) TableName() string {
