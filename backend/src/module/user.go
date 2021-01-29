@@ -31,7 +31,7 @@ type User struct {
 }
 
 // 表名
-func (User) TableName() string {
+func (user User) TableName() string {
 	return "user"
 }
 

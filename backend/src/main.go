@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/src/core"
 	"backend/src/initialize"
 )
 
@@ -11,4 +12,5 @@ func init() {
 
 // 主函数
 func main() {
+	core.RunServer()
 }

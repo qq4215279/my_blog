@@ -1,3 +1,9 @@
+/**
+ * constants
+ * @author liuzhen
+ * @Description
+ * @version 1.0.0 2021/1/28 16:56
+ */
 package module
 
 import (
@@ -6,8 +12,11 @@ import (
 )
 
 type BaseTable struct {
-	Id         uint           `gorm:"primarykey" json:"id" form:"id"`
-	CreateTime time.Time      `json:"createTime"`
-	UpdateTime time.Time      `json:"updateTime"`
-	DeleteTime gorm.DeletedAt `gorm:"index" json:"deleteTime"`
+	Id uint `gorm:"primary_key" json:"id" form:"id"`
+	// 创建时间
+	CreatedAt time.Time `json:"createdAt"`
+	// 更新时间
+	UpdatedAt time.Time `json:"updatedAt"`
+	// 删除时间
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"deletedAt"`
 }

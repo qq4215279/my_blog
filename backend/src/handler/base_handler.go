@@ -1,3 +1,9 @@
+/**
+ * constants
+ * @author liuzhen
+ * @Description
+ * @version 1.0.0 2021/1/28 16:56
+ */
 package handler
 
 import (
@@ -21,15 +27,15 @@ type ErrorResponse struct {
 }
 
 // 获取数字类型参数
+func PostFormUIntValue(context *gin.Context, key string) uint {
+	return uint(PostFormIntValue(context, key))
+}
+
+// 获取数字类型参数
 func PostFormIntValue(context *gin.Context, key string) (value int) {
 	intValue, _ := strconv.Atoi(context.PostForm(key))
 	value = intValue
 	return value
-}
-
-// 获取数字类型参数
-func PostFormUIntValue(context *gin.Context, key string) uint {
-	return uint(PostFormIntValue(context, key))
 }
 
 func WrapperResponseBody(context *gin.Context, body service.ResponseBody) {

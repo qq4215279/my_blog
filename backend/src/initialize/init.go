@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"backend/src/cache"
 	"backend/src/config"
 	"backend/src/constants"
 	"backend/src/global"
@@ -29,6 +30,7 @@ var (
 func Init() {
 	initSystem()
 	initGlobal()
+	initTask()
 	initJob()
 }
 
@@ -39,6 +41,16 @@ func initGlobal() {
 	log.Println("init gen router finished...")
 	global.DataBase = initGorm().Debug()
 	log.Println("init global finished...")
+}
+
+func initTask() {
+	log.Printf("init task")
+	ticker := time.NewTicker(time.Second * 1)
+	go func() {
+		for range ticker.C {
+			cache.ClearUser()
+		}
+	}()
 }
 
 // 初始化任务
@@ -60,9 +72,9 @@ func initSystem() {
 
 // 初始化路径
 func initPath() {
-	workPath := utils.GetParentDir(utils.GetWd())
-	os.Chdir(workPath)
-	log.Println("init path finished...")
+	workingDirectory := utils.GetParentDir(utils.GetWd())
+	os.Chdir(workingDirectory)
+	log.Println("init path finished, Current Working Directory: ", workingDirectory)
 }
 
 // 初始化配置
@@ -135,6 +147,7 @@ func initGorm() *gorm.DB {
 		return nil
 	}
 	log.Println("init gorm finished...")
+
 	return db
 }
 
@@ -150,9 +163,9 @@ func initRouters() *gin.Engine {
 	// 全局异常捕获
 	engine.Use(RecoverMiddleware())
 	// 用户拦截器
-	engine.Use(AuthMiddleware())
+	//engine.Use(AuthMiddleware())
 	// 权限拦截器
-	engine.Use(PrivilegeMiddleware())
+	//engine.Use(PrivilegeMiddleware())
 
 	ApiGroup := engine.Group(constants.BaseUrl)
 	ApiGroup.Use(ApiMiddlewareTest())
