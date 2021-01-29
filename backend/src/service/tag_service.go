@@ -24,7 +24,7 @@ func AddTag(param module.Tag) ResponseBody {
 	tag := new(module.Tag)
 	repository.FindByFirst(&module.Tag{Name: param.Name}, tag)
 	if tag.Id > 0 {
-		return newError("不能添加相同标签")
+		return NewCustomErrorResponseBody("不能添加相同标签")
 	}
 
 	repository.Create(&param)
@@ -50,10 +50,14 @@ func UpdateTag(param module.Tag) ResponseBody {
 	var tagByName module.Tag
 	repository.FindByFirst(&module.Tag{Name: param.Name}, &tagByName)
 	if len(tagByName.Name) > 0 && strings.EqualFold(tagByName.Name, param.Name) {
-		return newError("不能添加相同标签")
+		return NewCustomErrorResponseBody("不能添加相同标签")
 	}
 
-	repository.Save(param)
+	if !utils.IsBlank(param.Name) {
+		tagById.Name = param.Name
+	}
+
+	repository.Save(tagById)
 	return NewSimpleSuccessResponseBody()
 }
 
