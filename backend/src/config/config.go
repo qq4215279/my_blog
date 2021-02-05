@@ -111,6 +111,13 @@ type sso struct {
 	CheckTokenUrl string `yaml:"check-token-url"`
 }
 
+type upload struct {
+	UploadBasePath  string `yaml:"upload-base-path"`
+	FilePath        string `yaml:"file-path"`
+	FilePicturePath string `yaml:"file-picture-path"`
+	PicturePath     string `yaml:"picture-path"`
+}
+
 // 配置根节点
 type Config struct {
 	// 系统配置节点
@@ -131,4 +138,6 @@ type Config struct {
 	Crypto crypto `yaml:"crypto"`
 	// sso 配置
 	SSO sso `yaml:"sso"`
+	// 上传路径配置
+	Upload upload `yaml:"upload"`
 }

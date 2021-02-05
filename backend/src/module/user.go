@@ -1,6 +1,7 @@
 package module
 
 import (
+	"backend/src/global"
 	"gorm.io/gorm"
 	"time"
 )
@@ -38,4 +39,11 @@ func (user User) TableName() string {
 // 表名
 func (user User) Save(db *gorm.DB) {
 	db.Save(user)
+}
+
+// 获取用户
+func GetUser(userName string) *User {
+	var dbUser User
+	global.DataBase.Where(&User{UserName: userName}).First(&dbUser)
+	return &dbUser
 }

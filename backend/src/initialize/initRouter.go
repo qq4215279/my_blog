@@ -36,4 +36,26 @@ func InitGenRouter() {
 	// 删除博客
 	apiGroup.DELETE("blog", handler.DeleteBlog)
 
+	// 登录
+	apiGroup.POST("login", handler.Login)
+	// 登出
+	apiGroup.POST("logout", handler.Logout)
+	// token登录
+	apiGroup.POST("loginByToken", handler.LoginByToken)
+	// 禁用用户
+	apiGroup.POST("disableUser", handler.DisableUser)
+	// 启用用户
+	apiGroup.Group("user").POST("enableUser", handler.EnableUser)
+	// 修改ldap登陆方式的admin账号的密码
+	apiGroup.GET("updateLdapAdminPassword", handler.UpdateLdapAdminPassword)
+
+	// 上传文件
+	apiGroup.POST("uploadFile", handler.UploadFile)
+	// 下载文件
+	apiGroup.GET("downloadFile", handler.DownloadFile)
+	// 图片上传
+	apiGroup.POST("uploadPicture", handler.UploadPicture)
+	// 图片下载
+	apiGroup.GET("downloadPicture", handler.FindPicture)
+
 }

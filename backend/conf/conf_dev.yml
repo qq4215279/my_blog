@@ -55,3 +55,12 @@ sso:
   app-id: "hario_ci"
   base-url: "http://dev.be.sso.hariogame.com/root/"
   check-token-url: "loginByToken.action"
+upload:
+  # 上传跟目录
+  upload-base-path: "upload"
+  # 文件上传目录
+  file-path: "file"
+  # 文件图片
+  file-picture-path: "assets"
+  # 图片上传目录
+  picture-path: "picture"

@@ -37,3 +37,13 @@ func GetLogRootPath() string {
 func GetBuildFileRootPath() string {
 	return filepath.Join(GetWd(), global.Config.Build.FilePath)
 }
+
+// 获取文件上传目录
+func GetUploadFilePath() string {
+	return filepath.Join(GetWd(), global.Config.Upload.UploadBasePath, global.Config.Upload.FilePath)
+}
+
+// 获取图片上传目录
+func GetUploadPicturePath() string {
+	return filepath.Join(GetWd(), global.Config.Upload.UploadBasePath, global.Config.Upload.PicturePath)
+}

@@ -39,6 +39,7 @@ func initGlobal() {
 	global.Engine = initRouters()
 	InitGenRouter()
 	log.Println("init gen router finished...")
+
 	global.DataBase = initGorm().Debug()
 	log.Println("init global finished...")
 }
@@ -99,6 +100,11 @@ func initDir() {
 	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Log.LogBasePath, global.Config.Log.GinPath))
 	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Log.LogBasePath, global.Config.Log.OrmPath))
 	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Log.LogBasePath, global.Config.Log.BuildJobLogPath))
+
+	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Upload.UploadBasePath, global.Config.Upload.FilePath))
+	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Upload.UploadBasePath, global.Config.Upload.FilePath, global.Config.Upload.FilePicturePath))
+	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Upload.UploadBasePath, global.Config.Upload.PicturePath))
+
 	utils.MkdirAll(filepath.Join(utils.GetWd(), global.Config.Build.FilePath))
 	utils.MkdirAll(filepath.Join(utils.GetWd(), constants.SSHKeyDir))
 	log.Println("init dir finished...")
@@ -153,6 +159,9 @@ func initGorm() *gorm.DB {
 
 // 初始化gin路由
 func initRouters() *gin.Engine {
+	// 强制设置日志颜色
+	gin.ForceConsoleColor()
+
 	var engine = gin.Default()
 	// 跨域配置
 	engine.Use(Cors())
