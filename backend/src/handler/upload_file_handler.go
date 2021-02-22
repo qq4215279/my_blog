@@ -33,6 +33,11 @@ func UploadFile(ctx *gin.Context) {
 	}
 
 	//utils.InitEngine().Markdown(mdFileName, mdFile)
+	file, err := mdFile.Open()
+	fmt.Println(file)
+	var b []byte
+	//file.Read(b).
+	fmt.Println(b)
 
 	WrapperResponseBody(ctx, service.NewSimpleSuccessResponseBody())
 }
