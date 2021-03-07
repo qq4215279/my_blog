@@ -44,33 +44,23 @@ func Login(loginUser module.UserVo) ResponseBody {
 			UserDto:   *dbUser,
 			SessionId: sessionId,
 		})
+	} else { // 其他账号登录
+		e := ldapCheckPwd(loginUser)
+		if e != nil {
+			return NewCustomErrorResponseBody(fmt.Sprintf("登陆失败!%s", e.Error()))
+		}
+
+		if dbUser.State == constants.UserStateInit {
+			dbUser.State = constants.UserStateEnable
+		}
+		repository.Save(&dbUser)
+
+		dbUser.LoginToken = utils.GetRandomString(LoginTokenLength)
+		repository.Save(&dbUser)
+		sessionId := cache.Join(*dbUser)
+
+		return NewSuccessResponseBody(module.LoginResponse{UserDto: *dbUser, SessionId: sessionId})
 	}
-
-	e := ldapCheckPwd(loginUser)
-	if e != nil {
-		return NewCustomErrorResponseBody(fmt.Sprintf("登陆失败!%s", e.Error()))
-	}
-
-	if dbUser.State == constants.UserStateInit {
-		dbUser.State = constants.UserStateEnable
-	}
-	repository.Save(&dbUser)
-
-	dbUser.LoginToken = utils.GetRandomString(LoginTokenLength)
-	repository.Save(&dbUser)
-	sessionId := cache.Join(*dbUser)
-
-	return NewSuccessResponseBody(module.LoginResponse{UserDto: *dbUser, SessionId: sessionId})
-}
-
-// 登出
-func Logout(userName, sessionId string) ResponseBody {
-	dbUser := module.GetUser(userName)
-	if reflect.DeepEqual(dbUser, module.User{}) {
-		return NewCustomErrorResponseBody("用户名不存在")
-	}
-	cache.Invalid(sessionId)
-	return NewSimpleSuccessResponseBody()
 }
 
 func LoginByLADPToken(token, sessionId string) ResponseBody {
@@ -88,6 +78,16 @@ func LoginByLADPToken(token, sessionId string) ResponseBody {
 	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, SessionId: sessionId})
 }
 
+// 登出
+func Logout(userName, sessionId string) ResponseBody {
+	dbUser := module.GetUser(userName)
+	if reflect.DeepEqual(dbUser, module.User{}) {
+		return NewCustomErrorResponseBody("用户名不存在")
+	}
+	cache.Invalid(sessionId)
+	return NewSimpleSuccessResponseBody()
+}
+
 // 禁用账号
 func DisableUser(userName string) ResponseBody {
 	dbUser := module.GetUser(userName)
@@ -99,7 +99,7 @@ func DisableUser(userName string) ResponseBody {
 	return NewSimpleSuccessResponseBody()
 }
 
-// 禁用账号
+// 启用账号
 func EnableUser(userName string) ResponseBody {
 	dbUser := module.GetUser(userName)
 	if reflect.DeepEqual(dbUser, module.User{}) {
