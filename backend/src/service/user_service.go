@@ -41,8 +41,9 @@ func Login(loginUser module.UserVo) ResponseBody {
 		repository.Save(&dbUser)
 		sessionId := cache.Join(*dbUser)
 		return NewSuccessResponseBody(module.LoginResponse{
-			UserDto:   *dbUser,
-			SessionId: sessionId,
+			UserDto:    *dbUser,
+			Privileges: buildMenuTree(loginUser.UserName),
+			SessionId:  sessionId,
 		})
 	} else { // 其他账号登录
 		e := ldapCheckPwd(loginUser)
@@ -59,7 +60,7 @@ func Login(loginUser module.UserVo) ResponseBody {
 		repository.Save(&dbUser)
 		sessionId := cache.Join(*dbUser)
 
-		return NewSuccessResponseBody(module.LoginResponse{UserDto: *dbUser, SessionId: sessionId})
+		return NewSuccessResponseBody(module.LoginResponse{UserDto: *dbUser, Privileges: buildMenuTree(loginUser.UserName), SessionId: sessionId})
 	}
 }
 
@@ -75,7 +76,7 @@ func LoginByLADPToken(token, sessionId string) ResponseBody {
 	if user.State == constants.UserStateDisable {
 		return NewCustomErrorResponseBody("用户已禁用")
 	}
-	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, SessionId: sessionId})
+	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, Privileges: buildMenuTree(user.UserName), SessionId: sessionId})
 }
 
 // 登出
@@ -151,4 +152,29 @@ func UpdateLdapAdminPassword(param module.UserVo) ResponseBody {
 func getCheckTokenUrl() string {
 	sso := global.Config.SSO
 	return sso.BaseUrl + sso.CheckTokenUrl
+}
+
+// 是否有这个子账户
+func hasSubAccount(parentUserName, userName string) bool {
+	subs := make([]module.User, 0)
+	getSubAccountList(parentUserName, &subs)
+	for _, sub := range subs {
+		if sub.UserName == userName {
+			return true
+		}
+	}
+	return userName == parentUserName
+}
+
+// 获取子账号
+func getSubAccountList(userName string, list *[]module.User) {
+	currentLen := len(*list)
+	subAccountList := repository.GetSubAccount(userName)
+	for _, u := range subAccountList {
+		*list = append(*list, u)
+		getSubAccountList(u.UserName, list)
+	}
+	if currentLen == len(*list) {
+		return
+	}
 }

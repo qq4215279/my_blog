@@ -43,6 +43,7 @@ type SimpleUserVo struct {
 }
 
 type LoginResponse struct {
-	SessionId string `json:"sessionId"`
-	UserDto   User   `json:"userDto"`
+	SessionId  string `json:"sessionId"`
+	Privileges []Menu `json:"privileges"`
+	UserDto    User   `json:"userDto"`
 }

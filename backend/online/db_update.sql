@@ -69,5 +69,10 @@ CREATE TABLE `user`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 INSERT INTO `user` VALUES (1, 'admin', '0180cede84ad298b371f5506375ce52d', '198793', '超级管理员', 'liu865488158@qq.com', 'myProject,gmmx,sbtj,sbtj_unity,gmmx_win,zjzr,zjzr2,zjzr_cocos,zjzr2_unity,gmmx_unity,zjzr2_win,system,refreshdbcache,systeminfo,buildFlow,flowmanager,buildrecord,index', '', NULL, 2, '', '2021-01-28 11:17:33', '2021-01-28 11:17:37', NULL);
-
 INSERT INTO `db_version` VALUES ('0.0.0.0');
+
+INSERT INTO privilege(label,path,`name`,icon,is_leaf,is_forbidden,created_at,updated_at) VALUES('菜单管理','/menuManage','menuManage','icon',0,0,now(),now());
+INSERT INTO privilege(label,path,`name`,icon,is_leaf,is_forbidden,created_at,updated_at) VALUES('用户管理','/userManage','userManage','icon',0,0,now(),now());
+INSERT INTO privilege(label,path,`name`,icon,is_leaf,is_forbidden,created_at,updated_at) VALUES('测试管理','/testManage','testManage','icon',0,0,now(),now());
+INSERT INTO privilege(label,path,`name`,icon,is_leaf,is_forbidden,parent_name,parent_path,created_at,updated_at) VALUES('测试子管理','/testManage1','testManage1','icon',1,0,'testManage','/testManage',now(),now());
+INSERT INTO `db_version` VALUES ('0.0.0.1');
