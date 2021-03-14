@@ -13,3 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+/frontend/myblog-backstage/node_modules/*
+
+/frontend/myblog-backstage/pubilc/*
