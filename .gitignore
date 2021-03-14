@@ -13,17 +13,3 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-.idea/$CACHE_FILE$
-.idea/.gitignore
-.idea/MyBlog.iml
-.idea/copyright/
-.idea/dictionaries
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-backend/build/
-backend/go.sum
-backend/logs/
-backend/ssh_key/
-backend/upload/
