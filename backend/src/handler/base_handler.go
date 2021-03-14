@@ -50,4 +50,5 @@ func WrapperResponseBody(context *gin.Context, body service.ResponseBody) {
 			"data":  body.Data,
 		})
 	}
+
 }
