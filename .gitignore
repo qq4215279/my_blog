@@ -21,3 +21,4 @@ backend/logs/
 backend/ssh_key/
 backend/upload/
 
+/.idea/
