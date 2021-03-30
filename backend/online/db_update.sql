@@ -83,15 +83,15 @@ CREATE TABLE `privilege`  (
 -- ----------------------------
 -- Records of privilege
 -- ----------------------------
-INSERT INTO `privilege` VALUES (1, '菜单管理', '/menuManage', 'menuManage', 'icon', 0, 0, '', '', '2021-03-09 22:45:45', '2021-03-09 22:45:45', NULL);
-INSERT INTO `privilege` VALUES (2, '用户管理', '/userManage', 'userManage', 'icon', 0, 0, '', '', '2021-03-09 22:45:45', '2021-03-09 22:45:45', NULL);
-INSERT INTO `privilege` VALUES (3, '测试管理', '/testManage', 'testManage', 'icon', 0, 0, '', '', '2021-03-09 22:45:45', '2021-03-09 22:45:45', NULL);
-INSERT INTO `privilege` VALUES (4, '测试子管理', '/testManage1', 'testManage1', 'icon', 1, 0, 'testManage', '/testManage', '2021-03-09 22:45:45', '2021-03-09 22:45:45', NULL);
-INSERT INTO `privilege` VALUES (5, '文章', '/article', 'article', 'icon', 0, 0, '', '', '2021-03-30 22:33:59', '2021-03-30 22:33:59', NULL);
-INSERT INTO `privilege` VALUES (6, '评论管理', '/article/commentManage', 'commentManage', 'icon', 1, 0, 'article', '/article', '2021-03-30 22:33:59', '2021-03-30 22:33:59', NULL);
-INSERT INTO `privilege` VALUES (7, '标签管理', '/article/tagManage', 'tagManage', 'icon', 1, 0, 'article', '/article', '2021-03-30 22:33:59', '2021-03-30 22:33:59', NULL);
-INSERT INTO `privilege` VALUES (8, '文章管理', '/article/articleManage', 'articleManage', 'icon', 1, 0, 'article', '/article', '2021-03-30 22:33:59', '2021-03-30 22:33:59', NULL);
-
+INSERT INTO `privilege` VALUES (1, '菜单管理', '/menuManage', 'menuManage', 'icon', 0, 0, '', '', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (2, '用户管理', '/userManage', 'userManage', 'icon', 0, 0, '', '', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (3, '测试管理', '/testManage', 'testManage', 'icon', 0, 0, '', '', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (4, '测试子管理', '/testManage1', 'testManage1', 'icon', 1, 0, 'testManage', '/testManage', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (5, '文章', '/article', 'article', 'icon', 0, 0, '', '', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (6, '评论管理', '/article/commentManage', 'commentManage', 'icon', 1, 0, 'article', '/article', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (7, '标签管理', '/article/tagManage', 'tagManage', 'icon', 1, 0, 'article', '/article', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (8, '文章管理', '/article/articleManage', 'articleManage', 'icon', 1, 0, 'article', '/article', now(), now(), NULL);
+INSERT INTO `privilege` VALUES (9, '通知', '/noticeManage', 'noticeManage', 'icon', 0, 0, '', '', now(), now(), NULL);
 -- ----------------------------
 -- Table structure for tag
 -- ----------------------------
