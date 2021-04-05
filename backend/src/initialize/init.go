@@ -172,9 +172,9 @@ func initRouters() *gin.Engine {
 	// 全局异常捕获
 	engine.Use(RecoverMiddleware())
 	// 用户拦截器
-	//engine.Use(AuthMiddleware())
+	engine.Use(AuthMiddleware())
 	// 权限拦截器
-	//engine.Use(PrivilegeMiddleware())
+	engine.Use(PrivilegeMiddleware())
 
 	ApiGroup := engine.Group(constants.BaseUrl)
 	ApiGroup.Use(ApiMiddlewareTest())
