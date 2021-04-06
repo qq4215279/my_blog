@@ -118,6 +118,10 @@ type upload struct {
 	PicturePath     string `yaml:"picture-path"`
 }
 
+type jwt struct {
+	Secret string `yaml:"secret"`
+}
+
 // 配置根节点
 type Config struct {
 	// 系统配置节点
@@ -140,4 +144,6 @@ type Config struct {
 	SSO sso `yaml:"sso"`
 	// 上传路径配置
 	Upload upload `yaml:"upload"`
+	// Jwt 配置
+	Jwt jwt `yaml:"jwt"`
 }

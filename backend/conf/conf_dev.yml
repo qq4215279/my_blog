@@ -64,3 +64,6 @@ upload:
   file-picture-path: "assets"
   # 图片上传目录
   picture-path: "picture"
+jwt:
+  # 登录校验的密钥
+  secret: "myblog@Login(Auth}*^31)&mumu996%"

@@ -88,10 +88,10 @@ const (
 	ResponseStateFail = 0
 	// 成功
 	ResponseStateSuccess = 1
-	// 重定向去登录
-	ResponseStateRedirect = 2
-	// 系统错误
-	ResponseStateError = 3
+	// accessToken 过期
+	ResponseStateAccessExpire = 2
+	// refreshToken 过期
+	ResponseStateRefreshExpire = 3
 )
 
 var (

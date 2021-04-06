@@ -40,6 +40,8 @@ func InitGenRouter() {
 	apiGroup.POST("login", handler.Login)
 	// 登出
 	apiGroup.POST("logout", handler.Logout)
+	// 刷新accessToken
+	apiGroup.POST("refreshAccessToken", handler.RefreshAccessToken)
 	// token登录
 	apiGroup.POST("loginByToken", handler.LoginByToken)
 	// 禁用用户

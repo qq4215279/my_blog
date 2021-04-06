@@ -16,6 +16,15 @@ func Login(context *gin.Context) {
 	WrapperResponseBody(context, result)
 }
 
+// 刷新accessToken
+func RefreshAccessToken(context *gin.Context) {
+	refreshToken := context.Request.Header.Get("refreshToken")
+	userName := context.MustGet("userName").(string)
+
+	result := service.RefreshAccessToken(refreshToken, userName)
+	WrapperResponseBody(context, result)
+}
+
 // token登录
 func LoginByToken(context *gin.Context) {
 	var param module.UserVo

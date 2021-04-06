@@ -14,6 +14,8 @@ var (
 )
 
 type expiredUser struct {
+	// 开始时间
+	startTime int64
 	// 过期时间
 	expiredTime int64
 	// 用户数据
@@ -29,14 +31,29 @@ func GetUser(sessionId string) (module.User, bool) {
 	return user.user, true
 }
 
+// 获取开始时间
+func GetStartTime(sessionId string) (time.Duration, bool) {
+	user := sessionMap[sessionId]
+	if user == nil {
+		return 0, false
+	}
+	return time.Duration(user.startTime), true
+}
+
 func GetOnlineUser() map[string]*expiredUser {
 	return sessionMap
 }
 
 // 加入
-func Join(user module.User) string {
+func Join(user module.User, sessionId string) {
+	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + constants.UserInvalidTime, user: user}
+	log.Println(sessionId + " join...")
+}
+
+// 加入
+func Join2(user module.User) string {
 	sessionId := utils.GetRandomString(20)
-	sessionMap[sessionId] = &expiredUser{expiredTime: time.Now().Unix() + constants.UserInvalidTime, user: user}
+	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + constants.UserInvalidTime, user: user}
 	log.Println(sessionId + " join...")
 	return sessionId
 }
@@ -53,6 +70,19 @@ func AddInvalidTime(sessionId string) {
 	log.Println(sessionId + " addInvalidTime...")
 }
 
+// 失效
+func Invalid(sessionId string) {
+	log.Println(sessionId + " invalid...")
+	delete(sessionMap, sessionId)
+}
+
+// 清理应该失效的用户
+func ClearUser() {
+	for sessionId := range sessionMap {
+		SessionIsInvalid(sessionId)
+	}
+}
+
 // session是否过期
 func SessionIsInvalid(sessionId string) bool {
 	expiredUser, ok := sessionMap[sessionId]
@@ -67,17 +97,4 @@ func SessionIsInvalid(sessionId string) bool {
 	// 过期 清掉session 并返回过期
 	Invalid(sessionId)
 	return true
-}
-
-// 失效
-func Invalid(sessionId string) {
-	log.Println(sessionId + " invalid...")
-	delete(sessionMap, sessionId)
-}
-
-// 清理应该失效的用户
-func ClearUser() {
-	for sessionId := range sessionMap {
-		SessionIsInvalid(sessionId)
-	}
 }

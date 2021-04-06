@@ -4,6 +4,7 @@ import (
 	"backend/src/cache"
 	"backend/src/constants"
 	"backend/src/global"
+	"backend/src/handler"
 	"backend/src/module"
 	"backend/src/repository"
 	"backend/src/utils"
@@ -13,6 +14,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
+	"time"
 )
 
 const (
@@ -37,31 +39,51 @@ func Login(loginUser module.UserVo) ResponseBody {
 		if dbUser.Password != utils.MD5Encryption(loginUser.Password, dbUser.Salt) {
 			return NewCustomErrorResponseBody("密码不正确")
 		}
-		dbUser.LoginToken = utils.GetRandomString(LoginTokenLength)
-		repository.Save(&dbUser)
-		sessionId := cache.Join(*dbUser)
+
+		accessToken, _ := utils.CreateAccessIdToken(dbUser.UserName)
+		refreshToken, _ := utils.CreateRefreshIdToken(dbUser.UserName)
+
+		cache.Join(*dbUser, refreshToken)
 		return NewSuccessResponseBody(module.LoginResponse{
-			UserDto:    *dbUser,
-			Privileges: buildMenuTree(loginUser.UserName),
-			SessionId:  sessionId,
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+			Privileges:   buildMenuTree(loginUser.UserName),
+			UserDto:      *dbUser,
 		})
 	} else { // 其他账号登录
-		e := ldapCheckPwd(loginUser)
-		if e != nil {
-			return NewCustomErrorResponseBody(fmt.Sprintf("登陆失败!%s", e.Error()))
-		}
-
-		if dbUser.State == constants.UserStateInit {
-			dbUser.State = constants.UserStateEnable
-		}
-		repository.Save(&dbUser)
-
-		dbUser.LoginToken = utils.GetRandomString(LoginTokenLength)
-		repository.Save(&dbUser)
-		sessionId := cache.Join(*dbUser)
-
-		return NewSuccessResponseBody(module.LoginResponse{UserDto: *dbUser, Privileges: buildMenuTree(loginUser.UserName), SessionId: sessionId})
+		return NewCustomErrorResponseBody("当前项目只能admin用户登录")
 	}
+}
+
+func RefreshAccessToken(refreshToken, userName string) ResponseBody {
+	_, err := utils.ParseToken(refreshToken)
+	if err != nil {
+		return NewRefreshTokenExpireResponseBody()
+	}
+
+	// 创建新的accessToken
+	accessToken, err := utils.CreateAccessIdToken(userName)
+
+	//刷新refreshToken
+	user, hasUser := cache.GetUser(refreshToken)
+	if !hasUser {
+		user = *module.GetUser(user.UserName)
+	}
+
+	// 判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
+	// refreshToken 有效时长是应该为accessToken有效时长的2倍
+	minTimeOfRefreshToken := utils.AccessTokenExpirationTime * 2
+	now := time.Duration(time.Now().UnixNano())
+	refreshTokenStartTime, _ := cache.GetStartTime(refreshToken)
+	// (refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点) 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
+	if refreshTokenStartTime == 0 || (refreshTokenStartTime+utils.RefreshTokenExpirationTime)-now <= minTimeOfRefreshToken {
+		cache.Invalid(refreshToken)
+
+		refreshToken, _ = utils.CreateRefreshIdToken(userName)
+		cache.Join(user, refreshToken)
+	}
+
+	return NewSuccessResponseBody(module.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, Privileges: buildMenuTree(user.UserName), UserDto: user})
 }
 
 func LoginByLADPToken(token, sessionId string) ResponseBody {

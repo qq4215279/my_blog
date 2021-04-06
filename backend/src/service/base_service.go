@@ -20,7 +20,17 @@ func NewSimpleSuccessResponseBody() ResponseBody {
 
 // 创建重新登陆异常返回
 func NewNonSessionErrorResponseBody() ResponseBody {
-	return ResponseBody{State: constants.ResponseStateRedirect, Msg: "请重新登录"}
+	return ResponseBody{State: constants.ResponseStateAccessExpire, Msg: "请重新登录"}
+}
+
+// refreshToken expire 过期
+func NewRefreshTokenExpireResponseBody() ResponseBody {
+	return ResponseBody{State: constants.ResponseStateRefreshExpire, Msg: "refreshToken expire"}
+}
+
+// accessToken expire 过期
+func NewAccessTokenExpireResponseBody() ResponseBody {
+	return ResponseBody{State: constants.ResponseStateAccessExpire, Msg: "accessToken expire"}
 }
 
 // 创建自定义异常

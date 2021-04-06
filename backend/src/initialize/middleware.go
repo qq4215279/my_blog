@@ -115,6 +115,37 @@ func ApiMiddlewareTest() gin.HandlerFunc {
 	}
 }
 
+// JWTAuthMiddleware 基于JWT的认证中间件
+func JWTAuthMiddleware() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		// 不需要校验就放行
+		if !needCheckAuth(c.FullPath()) {
+			c.Next()
+			return
+		}
+
+		accessToken := c.Request.Header.Get("accessToken")
+		if accessToken == "" {
+			log.Printf("%s call %s fail %s", c.Request.URL, c.FullPath(), "accessToken不能为空")
+			c.Abort()
+			handler.WrapperResponseBody(c, service.NewAccessTokenExpireResponseBody())
+			return
+		}
+
+		mc, err := utils.ParseToken(accessToken)
+		if err != nil {
+			log.Printf("%s call %s fail %s", c.Request.URL, c.FullPath(), "无效的accessToken")
+			c.Abort()
+			handler.WrapperResponseBody(c, service.NewAccessTokenExpireResponseBody())
+			return
+		}
+
+		// 将当前请求的username信息保存到请求的上下文c上
+		c.Set("username", mc.Username)
+		c.Next() // 后续的处理函数可以用过c.Get("username")来获取当前请求的用户信息
+	}
+}
+
 // 用户拦截中间件
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
