@@ -19,9 +19,8 @@ func Login(context *gin.Context) {
 // 刷新accessToken
 func RefreshAccessToken(context *gin.Context) {
 	refreshToken := context.Request.Header.Get("refreshToken")
-	userName := context.MustGet("userName").(string)
 
-	result := service.RefreshAccessToken(refreshToken, userName)
+	result := service.RefreshAccessToken(refreshToken)
 	WrapperResponseBody(context, result)
 }
 

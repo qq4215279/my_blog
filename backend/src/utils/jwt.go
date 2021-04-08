@@ -14,8 +14,8 @@ import (
 	"time"
 )
 
-const RefreshTokenExpirationTime = time.Hour * 2
-const AccessTokenExpirationTime = time.Hour
+const RefreshTokenExpirationTime = time.Minute * 2
+const AccessTokenExpirationTime = time.Minute
 
 var MySecret = []byte(global.Config.Jwt.Secret)
 

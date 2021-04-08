@@ -4,12 +4,10 @@ import (
 	"backend/src/cache"
 	"backend/src/constants"
 	"backend/src/global"
-	"backend/src/handler"
 	"backend/src/module"
 	"backend/src/repository"
 	"backend/src/utils"
 	"errors"
-	"fmt"
 	"gopkg.in/ldap.v2"
 	"log"
 	"reflect"
@@ -55,11 +53,12 @@ func Login(loginUser module.UserVo) ResponseBody {
 	}
 }
 
-func RefreshAccessToken(refreshToken, userName string) ResponseBody {
-	_, err := utils.ParseToken(refreshToken)
+func RefreshAccessToken(refreshToken string) ResponseBody {
+	mc, err := utils.ParseToken(refreshToken)
 	if err != nil {
 		return NewRefreshTokenExpireResponseBody()
 	}
+	userName := mc.Username
 
 	// 创建新的accessToken
 	accessToken, err := utils.CreateAccessIdToken(userName)
@@ -98,7 +97,7 @@ func LoginByLADPToken(token, sessionId string) ResponseBody {
 	if user.State == constants.UserStateDisable {
 		return NewCustomErrorResponseBody("用户已禁用")
 	}
-	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, Privileges: buildMenuTree(user.UserName), SessionId: sessionId})
+	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, Privileges: buildMenuTree(user.UserName)})
 }
 
 // 登出

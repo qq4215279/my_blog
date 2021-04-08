@@ -17,18 +17,10 @@ import (
 var (
 	// 不用校验用户的白名单前缀
 	whiteListPrefix = []string{
-		"user/login",
-		"user/loginByToken",
-		"user/getSubAccountList",
-		"system/",
-		"callBack/",
-		"client/",
-		"plugin/",
-		"ws/",
-		"buildRecord/readLog",
-		"buildFlow/getList",
-		"env/getEnvSelect",
-		"key/downloadSSHKey",
+		"login",
+		"refreshAccessToken",
+		"loginByToken",
+		"getSubAccountList",
 	}
 	// 不需要打印接口参数日志的白名单前缀
 	whiteListNoLogPrefix = []string{"buildRecord/appendLog"}
