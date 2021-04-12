@@ -46,7 +46,7 @@ func GetOnlineUser() map[string]*expiredUser {
 
 // 加入
 func Join(user module.User, sessionId string) {
-	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + constants.UserInvalidTime, user: user}
+	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + int64(utils.RefreshTokenExpirationTime), user: user}
 	log.Println(sessionId + " join...")
 }
 
@@ -59,15 +59,15 @@ func Join2(user module.User) string {
 }
 
 // 延迟失效时间
-func (u *expiredUser) addExpiredTime() {
-	u.expiredTime = time.Now().Unix() + constants.UserInvalidTime
-}
-
-// 延迟失效时间
 func AddInvalidTime(sessionId string) {
 	expiredUser := sessionMap[sessionId]
 	expiredUser.addExpiredTime()
 	log.Println(sessionId + " addInvalidTime...")
+}
+
+// 延迟失效时间
+func (u *expiredUser) addExpiredTime() {
+	u.expiredTime = time.Now().Unix() + int64(utils.RefreshTokenExpirationTime)
 }
 
 // 失效

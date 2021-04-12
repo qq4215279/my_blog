@@ -41,7 +41,7 @@ func Login(loginUser module.UserVo) ResponseBody {
 		accessToken, _ := utils.CreateAccessIdToken(dbUser.UserName)
 		refreshToken, _ := utils.CreateRefreshIdToken(dbUser.UserName)
 
-		cache.Join(*dbUser, refreshToken)
+		cache.Join(*dbUser, loginUser.UserName)
 		return NewSuccessResponseBody(module.LoginResponse{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
@@ -51,6 +51,22 @@ func Login(loginUser module.UserVo) ResponseBody {
 	} else { // 其他账号登录
 		return NewCustomErrorResponseBody("当前项目只能admin用户登录")
 	}
+}
+
+func GetInfo(accessToken string) ResponseBody {
+	mc, err := utils.ParseToken(accessToken)
+	if err != nil {
+		return NewAccessTokenExpireResponseBody()
+	}
+	userName := mc.Username
+
+	//刷新refreshToken
+	user, hasUser := cache.GetUser(userName)
+	if !hasUser {
+		user = *module.GetUser(user.UserName)
+	}
+
+	return NewSuccessResponseBody(module.LoginResponse{AccessToken: accessToken, Privileges: buildMenuTree(user.UserName), UserDto: user})
 }
 
 func RefreshAccessToken(refreshToken string) ResponseBody {
@@ -63,41 +79,28 @@ func RefreshAccessToken(refreshToken string) ResponseBody {
 	// 创建新的accessToken
 	accessToken, err := utils.CreateAccessIdToken(userName)
 
-	//刷新refreshToken
-	user, hasUser := cache.GetUser(refreshToken)
+	user, hasUser := cache.GetUser(userName)
 	if !hasUser {
 		user = *module.GetUser(user.UserName)
 	}
 
+	//刷新refreshToken
 	// 判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
 	// refreshToken 有效时长是应该为accessToken有效时长的2倍
 	minTimeOfRefreshToken := utils.AccessTokenExpirationTime * 2
 	now := time.Duration(time.Now().UnixNano())
-	refreshTokenStartTime, _ := cache.GetStartTime(refreshToken)
-	// (refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点) 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
-	if refreshTokenStartTime == 0 || (refreshTokenStartTime+utils.RefreshTokenExpirationTime)-now <= minTimeOfRefreshToken {
-		cache.Invalid(refreshToken)
+	refreshTokenStartTime, _ := cache.GetStartTime(userName)
+	// (refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点)
+	// 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
+	if (refreshTokenStartTime+utils.RefreshTokenExpirationTime)-now <= minTimeOfRefreshToken {
+		cache.Invalid(userName)
 
 		refreshToken, _ = utils.CreateRefreshIdToken(userName)
 		cache.Join(user, refreshToken)
+		cache.AddInvalidTime(userName)
 	}
 
 	return NewSuccessResponseBody(module.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, Privileges: buildMenuTree(user.UserName), UserDto: user})
-}
-
-func LoginByLADPToken(token, sessionId string) ResponseBody {
-	user, hasUser := cache.GetUser(sessionId)
-	if !hasUser {
-		return NewCustomErrorResponseBody("token失效")
-	}
-	if user.LoginToken != token {
-		return NewCustomErrorResponseBody("token不正确")
-	}
-	user = *module.GetUser(user.UserName)
-	if user.State == constants.UserStateDisable {
-		return NewCustomErrorResponseBody("用户已禁用")
-	}
-	return NewSuccessResponseBody(module.LoginResponse{UserDto: user, Privileges: buildMenuTree(user.UserName)})
 }
 
 // 登出
@@ -106,7 +109,7 @@ func Logout(userName, sessionId string) ResponseBody {
 	if reflect.DeepEqual(dbUser, module.User{}) {
 		return NewCustomErrorResponseBody("用户名不存在")
 	}
-	cache.Invalid(sessionId)
+	cache.Invalid(userName)
 	return NewSimpleSuccessResponseBody()
 }
 

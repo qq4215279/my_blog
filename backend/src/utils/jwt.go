@@ -14,17 +14,17 @@ import (
 	"time"
 )
 
-const RefreshTokenExpirationTime = time.Minute * 2
-const AccessTokenExpirationTime = time.Minute
+const RefreshTokenExpirationTime = time.Hour * 2
+const AccessTokenExpirationTime = time.Hour
 
 var MySecret = []byte(global.Config.Jwt.Secret)
 
 func CreateAccessIdToken(userName string) (string, error) {
-	return GenToken(userName, RefreshTokenExpirationTime)
+	return GenToken(userName, AccessTokenExpirationTime)
 }
 
 func CreateRefreshIdToken(userName string) (string, error) {
-	return GenToken(userName, AccessTokenExpirationTime)
+	return GenToken(userName, RefreshTokenExpirationTime)
 }
 
 // GenToken 生成JWT
