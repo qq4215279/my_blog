@@ -2,6 +2,7 @@ package cache
 
 import (
 	"backend/src/constants"
+	"backend/src/global"
 	"backend/src/module"
 	"backend/src/utils"
 	"log"
@@ -46,7 +47,7 @@ func GetOnlineUser() map[string]*expiredUser {
 
 // 加入
 func Join(user module.User, sessionId string) {
-	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + int64(utils.RefreshTokenExpirationTime), user: user}
+	sessionMap[sessionId] = &expiredUser{startTime: time.Now().Unix(), expiredTime: time.Now().Unix() + global.Config.Jwt.RefreshTokenExpirationTime, user: user}
 	log.Println(sessionId + " join...")
 }
 
@@ -67,7 +68,7 @@ func AddInvalidTime(sessionId string) {
 
 // 延迟失效时间
 func (u *expiredUser) addExpiredTime() {
-	u.expiredTime = time.Now().Unix() + int64(utils.RefreshTokenExpirationTime)
+	u.expiredTime = time.Now().Unix() + global.Config.Jwt.RefreshTokenExpirationTime
 }
 
 // 失效

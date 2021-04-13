@@ -119,7 +119,9 @@ type upload struct {
 }
 
 type jwt struct {
-	Secret string `yaml:"secret"`
+	Secret                     string `yaml:"secret"`
+	RefreshTokenExpirationTime int64  `yaml:"refresh-token-expiration-time"`
+	AccessTokenExpirationTime  int64  `yaml:"access-token-expiration-time"`
 }
 
 // 配置根节点

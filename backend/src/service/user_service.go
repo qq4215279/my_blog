@@ -87,12 +87,13 @@ func RefreshAccessToken(refreshToken string) ResponseBody {
 	//刷新refreshToken
 	// 判断是否刷新 refreshToken，如果refreshToken 快过期了 需要重新生成一个替换掉
 	// refreshToken 有效时长是应该为accessToken有效时长的2倍
-	minTimeOfRefreshToken := utils.AccessTokenExpirationTime * 2
+	minTimeOfRefreshToken := time.Duration(global.Config.Jwt.AccessTokenExpirationTime*2) * time.Second
 	now := time.Duration(time.Now().UnixNano())
 	refreshTokenStartTime, _ := cache.GetStartTime(userName)
+	refreshTokenExpirationTime := time.Duration(global.Config.Jwt.RefreshTokenExpirationTime) * time.Second
 	// (refreshToken上次创建的时间点 + refreshToken的有效时长 - 当前时间点)
 	// 表示refreshToken还剩余的有效时长，如果小于2倍accessToken时长 ，则刷新 refreshToken
-	if (refreshTokenStartTime+utils.RefreshTokenExpirationTime)-now <= minTimeOfRefreshToken {
+	if (refreshTokenStartTime+refreshTokenExpirationTime)-now <= minTimeOfRefreshToken {
 		cache.Invalid(userName)
 
 		refreshToken, _ = utils.CreateRefreshIdToken(userName)
