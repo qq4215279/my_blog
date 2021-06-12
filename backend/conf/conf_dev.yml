@@ -68,6 +68,6 @@ jwt:
   # 登录校验的密钥
   secret: "myblog@Login(Auth}*^31)&mumu996%"
   # refreshToken过期时间(单位：s)
-  refresh-token-expiration-time: 180
+  refresh-token-expiration-time: 3600
   # accessToken过期时间(单位：s)
-  access-token-expiration-time: 60
+  access-token-expiration-time: 1800

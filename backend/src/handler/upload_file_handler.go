@@ -51,7 +51,8 @@ func DownloadFile(ctx *gin.Context) {
 	//fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 	disposition := fmt.Sprintf("attachment; filename=%s", fileName)
 	ctx.Writer.Header().Add("Content-Disposition", disposition)
-	ctx.Writer.Header().Add("Content-Type", "application/octet-strea")
+	//ctx.Writer.Header().Add("Content-Type", "application/octet-strea")
+	ctx.Writer.Header().Add("Content-Type", "multipart/form-data")
 
 	// 下载
 	ctx.File(path)
@@ -84,6 +85,11 @@ func FindPicture(ctx *gin.Context) {
 	pictureName := ctx.Query("picName")
 
 	path := utils.GetUploadPicturePath() + "/" + pictureName
+
+	ctx.Writer.Header().Add("Content-Type", "image/jpeg")
+	//fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
+	disposition := fmt.Sprintf("attachment; filename=%s", pictureName)
+	ctx.Writer.Header().Add("Content-Disposition", disposition)
 
 	// 下载
 	ctx.File(path)
