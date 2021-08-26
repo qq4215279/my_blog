@@ -16,22 +16,19 @@ func Login(context *gin.Context) {
 	WrapperResponseBody(context, result)
 }
 
+// 获取用户信息
+func GetInfo(context *gin.Context) {
+	accessToken := context.Request.Header.Get("accessToken")
+
+	result := service.GetInfo(accessToken)
+	WrapperResponseBody(context, result)
+}
+
 // 刷新accessToken
 func RefreshAccessToken(context *gin.Context) {
 	refreshToken := context.Request.Header.Get("refreshToken")
 
 	result := service.RefreshAccessToken(refreshToken)
-	WrapperResponseBody(context, result)
-}
-
-// token登录
-func LoginByToken(context *gin.Context) {
-	var param module.UserVo
-	_ = context.ShouldBindWith(&param, binding.Form)
-
-	// ldap登录
-	sessionId := context.MustGet(constants.SessionIdKey)
-	result := service.LoginByLADPToken(param.Token, sessionId.(string))
 	WrapperResponseBody(context, result)
 }
 
