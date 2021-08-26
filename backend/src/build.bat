@@ -3,4 +3,4 @@ set GOPATH=D:\data\GoWorkSpace
 set GOARCH=amd64
 : GOOS 是目标操作系统 支持 darwin freebsd linux windows android dragonfly netbsd openbsd plan9 solaris
 set GOOS=linux
-go build
+go build -o myblog.exe
