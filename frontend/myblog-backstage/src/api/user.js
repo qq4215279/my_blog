@@ -1,10 +1,10 @@
 import request from '../router/request';
 
 export const loginByUsername = (account, password) => request({
-    url: '/api/user/login',
+    url: '/api/root/login',
     method: 'post',
-    data: {
-      account,
+    params: {
+      userName:account,
       password
     }
 });

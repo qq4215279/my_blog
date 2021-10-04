@@ -7,13 +7,6 @@ const menu = [
         children: []
     },
     {
-        label: '文章管理',
-        path: '/article',
-        name:'article',
-        icon: 'icon',
-        children: []
-    },
-    {
         label: '用户管理',
         path: '/userManage',
         name:'userManage',
@@ -21,17 +14,40 @@ const menu = [
         children: []
     },
     {
-        label: '测试管理',
-        path: '/testManage',
-        name:'testManage',
+        label: '文章',
+        path: '/article',
+        name:'article',
         icon: 'icon',
-        children: [{
-            label: '测试子管理',
-            path: '/testManage/testManage1',
-            name:'testManage1',
-            icon: 'icon',
-            children: []
-        }]
+        children: [
+            {
+                label: '评论管理',
+                path: '/article/commentManage',
+                name:'commentManage',
+                icon: 'icon',
+                children: []
+            },
+            {
+                label: '标签管理',
+                path: '/article/tagManage',
+                name:'tagManage',
+                icon: 'icon',
+                children: []
+            },
+            {
+                label: '文章管理',
+                path: '/article/commentManage',
+                name:'commentManage',
+                icon: 'icon',
+                children: []
+            },
+        ]
+    },
+    {
+        label: '通知',
+        path: '/noticeManage',
+        name:'noticeManage',
+        icon: 'icon',
+        children: []
     },
 ]
 const topMenu = [

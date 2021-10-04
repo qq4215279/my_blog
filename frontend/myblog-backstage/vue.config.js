@@ -16,7 +16,10 @@ module.exports = {
           //如果要代理 websockets，配置这个参数
           ws: true, 
           // logLevel:"debug",
-          target: "http://mock",
+          target:"http://localhost:8001",
+          // target:"http://baidu.com",
+          // target: "http://mock",
+          changeOrigin: true,
           pathRewrite: {
             "^/api": ""
           }

@@ -20,7 +20,7 @@ export default{
     //开发环境依赖
     dev:{
         //是否开启mock
-        mock:true,
+        mock:false,
         //mock基础路径
         mockBaseUrl:"api"
     },

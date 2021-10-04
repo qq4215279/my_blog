@@ -1,17 +1,13 @@
 <template>
-  <div>文章管理</div>
+  <div class="tx-mavonEditor">
+    <mavon-editor v-model="value"/>
+  </div>
 </template>
-<script>
-export default {
-  components: {},
-  data() {
-    return {};
-  },
-  created() {},
-  mounted() {},
-  methods: {},
-  computed: {},
-};
-</script>
-<style>
+<style lang="scss">
+.tx-mavonEditor{
+  height:100%;
+  .v-note-wrapper{
+    height: 100%;
+  }
+}
 </style>

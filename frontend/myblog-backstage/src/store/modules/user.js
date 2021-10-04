@@ -17,16 +17,20 @@ const user = {
     actions:{
         //根据用户名登录
         LoginByUsername({commit}, userInfo) {
+            console.log(456)
             return new Promise((resolve, reject) => {
                 loginByUsername(userInfo.username, userInfo.password).then(res => {
+                    console.log(789)
+                    console.log(res)
                     const data = res.data.data;
-                    commit('SET_TOKEN', data.accessToken);
-                    commit('SET_USER_INFO', data.userInfo);
+                    commit('SET_TOKEN', data.userDto.loginToken);
+                    commit('SET_USER_INFO', data.userDto);
                     //----根据需求是否需要-------
-                    commit('SET_MENU', data.userInfo.menu);
-                    commit('SET_TOP_MENU', data.userInfo.topMenu);
+                    commit('SET_MENU', data.privileges);
+                    commit('SET_TOP_MENU', data.userDto.topMenu || []);
                     //--------------------------
                     // commit('DEL_ALL_TAG');
+                    console.log(res)
                     resolve(res);
                 }).catch(error => {
                     reject(error);

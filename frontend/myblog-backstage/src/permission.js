@@ -13,7 +13,7 @@ import {getToken} from '@/util/auth'
 
 router.beforeEach((to, from, next) => {
   const meta = to.meta || {};
-  if (getToken()) {
+  if (getToken() && getToken() !== "undefined") {
     //如果登录成功访问登录页跳转到主页
     if (to.path === '/login') { 
         next({ path: '/' })
